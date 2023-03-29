@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExceptionCommon\ExceptionCommon\ExceptionCommon.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="R_APICommon">
+      <HintPath>..\..\RuntimeLibrary\RuntimeLibrary\Back\R_APICommon.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

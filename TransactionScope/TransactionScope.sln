@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranScopeBack", "TranScopeB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranScopeService", "TranScopeService\TranScopeService.csproj", "{7D8551FD-3EA3-48B4-A04D-3F0BCF746382}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API-TranScope", "API-TranScope\API-TranScope.csproj", "{22DD7B4E-8416-43AF-8D89-3D921E038063}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{7D8551FD-3EA3-48B4-A04D-3F0BCF746382}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D8551FD-3EA3-48B4-A04D-3F0BCF746382}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D8551FD-3EA3-48B4-A04D-3F0BCF746382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22DD7B4E-8416-43AF-8D89-3D921E038063}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22DD7B4E-8416-43AF-8D89-3D921E038063}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22DD7B4E-8416-43AF-8D89-3D921E038063}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22DD7B4E-8416-43AF-8D89-3D921E038063}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

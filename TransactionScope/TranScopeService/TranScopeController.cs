@@ -15,21 +15,16 @@ namespace TranScopeService
     public class TranScopeController : ControllerBase, ITranScope
     {
         [HttpPost]
-        public TranScopeDemoResultDTO TranScopeDemo(TranScopDemoParameterDTO poTranScopeDemoParameter)
+        public TranScopeDemoResultDTO ProcessWithoutTransaction(int poProcessRecord)
         {
             R_Exception loException = new R_Exception();
             TranScopeDemoResultDTO loReturn = null;
+            TranScopeCls loCls = null;
             try
             {
-                loReturn = new TranScopeDemoResultDTO()
-                {
-                    data = new TranScopeDemoDataDTO()
-                };
-                loReturn.data.IsSuccess = false;
-
-                TranScopeCls loCls = new TranScopeCls();
-                loCls.TranScopeDemo(poTranScopeDemoParameter);
-                loReturn.data.IsSuccess = true;
+                loCls = new TranScopeCls();
+                loReturn = new TranScopeDemoResultDTO();
+                loReturn.data = loCls.ProcessWithoutTransactionDB(poProcessRecord);
             }
             catch (Exception ex)
             {
@@ -40,5 +35,59 @@ namespace TranScopeService
 
             return loReturn;
         }
+        [HttpPost]
+        public TranScopeDemoResultDTO ProcessAllWithTransaction(int poProcessRecord)
+        {
+            R_Exception loException = new R_Exception();
+            TranScopeDemoResultDTO loReturn = null;
+            TranScopeCls loCls = null;
+            try
+            {
+                loCls = new TranScopeCls();
+                loReturn = new TranScopeDemoResultDTO();
+                loReturn.data = loCls.ProcessAllWithTransactionDB(poProcessRecord);
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+
+            return loReturn;
+
+        }
+        [HttpPost]
+        public TranScopeDemoResultDTO ProcessPerRecordTransaction(int poProcessRecord)
+        {
+            throw new NotImplementedException();
+        }
+
+        //[HttpPost]
+        //public TranScopeDemoResultDTO TranScopeDemo(TranScopDemoParameterDTO poTranScopeDemoParameter)
+        //{
+        //    R_Exception loException = new R_Exception();
+        //    TranScopeDemoResultDTO loReturn = null;
+        //    try
+        //    {
+        //        loReturn = new TranScopeDemoResultDTO()
+        //        {
+        //            data = new TranScopeDemoDataDTO()
+        //        };
+        //        loReturn.data.IsSuccess = false;
+
+        //        TranScopeCls loCls = new TranScopeCls();
+        //        loCls.TranScopeDemo(poTranScopeDemoParameter);
+        //        loReturn.data.IsSuccess = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        loException.Add(ex);
+        //    }
+        //EndBlock:
+        //    loException.ThrowExceptionIfErrors();
+
+        //    return loReturn;
+        //}
     }
 }

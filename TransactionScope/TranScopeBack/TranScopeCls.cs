@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using TranScopeCommon;
+using System.Transactions;
 
 namespace TranScopeBack
 {
@@ -18,14 +19,42 @@ namespace TranScopeBack
         {
             R_Exception loException = new R_Exception();
             TranScopeDemoDataDTO loReturn = new TranScopeDemoDataDTO();
-            R_Db loDb = new R_Db();
             List<CustomerDbDTO> Customer;
 
             try
             {
                 Customer = GetAllCustomer(poProcessRecordCount);
-                //RemoveAllRecord(Customer);
-                //AddAllRecord(List<CustomerDbDTO>);
+                RemoveAllRecord(Customer);
+                AddAllRecord(Customer);
+
+                loReturn.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+
+            return loReturn;
+        }
+        public TranScopeDemoDataDTO ProcessAllWithTransactionDB(int poProcessRecordCount)
+        {
+            R_Exception loException = new R_Exception();
+            TranScopeDemoDataDTO loReturn = new TranScopeDemoDataDTO();
+            List<CustomerDbDTO> Customer;
+
+            try
+            {
+                Customer = GetAllCustomer(poProcessRecordCount);
+                using (TransactionScope TransScope = new TransactionScope(TransactionScopeOption.Required))
+                {
+                    RemoveAllRecord(Customer);
+                    AddAllRecord(Customer);
+                    TransScope.Complete();
+                }
+
+                loReturn.IsSuccess = true;
             }
             catch (Exception ex)
             {
@@ -186,31 +215,41 @@ namespace TranScopeBack
             DbParameter loDbParCustomerID;
             DbParameter loDbParCustomerName;
             DbParameter loDbParContactName;
+            int lnCount;
+
             try
             {
                 loDb = new R_Db();
                 loCommand = loDb.GetCommand();
                 loConn = loDb.GetConnection();
+
                 loDb.R_AddCommandParameter(loCommand, "CustomerID", DbType.String, 50, "");
                 loDb.R_AddCommandParameter(loCommand, "CustomerName", DbType.String, 50, "");
                 loDb.R_AddCommandParameter(loCommand, "ContactName", DbType.String, 50, "");
-
                 loDbParCustomerID = loCommand.Parameters["CustomerID"];
                 loDbParCustomerName = loCommand.Parameters["CustomerName"];
                 loDbParContactName = loCommand.Parameters["ContactName"];
 
+                //loCommand.CommandText = lcCmd;
+                //loDb.SqlExecNonQuery(loConn, loCommand, false);
+                lcCmd = "INSERT into TestCopyCustomer(CustomerID, CustomerName, ContactName) values (@CustomerID, @CustomerName, @ContactName)";
                 loCommand.CommandText = lcCmd;
-                loDb.SqlExecNonQuery(loConn, loCommand, false);
+                lnCount = 1;
 
                 foreach (var item in poCustomer)
                 {
-                    lcCmd = "INSERT into TestCopyCustomer(Customer_Id, Customer_Name, Contact_Name) values (@Customer_Id, @Customer_Name, @Contact_Name)";
-                    loCommand.CommandText = lcCmd;
+                    if ((lnCount % 3) == 0)
+                    {
+                        loException.Add("001", $"Error at {lnCount} data");
+                        goto EndBlock;
+                    }
+
                     loDbParCustomerID.Value = item.CustomerId;
                     loDbParCustomerName.Value = item.CustomerName;
                     loDbParContactName.Value = item.ContactName;
 
-                    loDb.SqlExecNonQuery(loConn,loCommand, false);
+                    loDb.SqlExecNonQuery(loConn, loCommand, false);
+                    lnCount++;
                 }
             }
             catch (Exception ex)

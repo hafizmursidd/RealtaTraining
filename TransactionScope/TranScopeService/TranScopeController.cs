@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using R_Common;
+using Microsoft.AspNetCore.Mvc;
+using TranScopeCommon;
+using TranScopeBack;
+
+namespace TranScopeService
+{
+    [Route("api/[controller]/[action]")]
+    [ApiController]
+    public class TranScopeController : ControllerBase, ITranScope
+    {
+        [HttpPost]
+        public TranScopeDemoResultDTO TranScopeDemo(TranScopDemoParameterDTO poTranScopeDemoParameter)
+        {
+            R_Exception loException = new R_Exception();
+            TranScopeDemoResultDTO loReturn = null;
+            try
+            {
+                loReturn = new TranScopeDemoResultDTO()
+                {
+                    data = new TranScopeDemoDataDTO()
+                };
+                loReturn.data.IsSuccess = false;
+
+                TranScopeCls loCls = new TranScopeCls();
+                loCls.TranScopeDemo(poTranScopeDemoParameter);
+                loReturn.data.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+
+            return loReturn;
+        }
+    }
+}

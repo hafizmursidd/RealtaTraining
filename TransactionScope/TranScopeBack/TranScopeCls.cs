@@ -49,7 +49,7 @@ namespace TranScopeBack
                 Customer = GetAllCustomer(poProcessRecordCount);
                 using (TransactionScope TransScope = new TransactionScope(TransactionScopeOption.Required))
                 {
-                    RemoveAllRecord(Customer);
+                    RemoveAllCustomer(Customer);
                     AddAllRecord(Customer);
                     TransScope.Complete();
                 }
@@ -65,69 +65,56 @@ namespace TranScopeBack
 
             return loReturn;
         }
-
-
-
-        public void TranScopeDemo(TranScopDemoParameterDTO poTranScopDemoParameterDTO)
+        public TranScopeDemoDataDTO ProcessEachTransactionDB(int poProcessRecordCount)
         {
             R_Exception loException = new R_Exception();
-            R_Db loDb = new R_Db();
-
-            switch (poTranScopDemoParameterDTO.TransType)
+            TranScopeDemoDataDTO loRtn = new TranScopeDemoDataDTO();
+            List<CustomerDbDTO> Customers;
+            int lnCount;
+            try
             {
-                case eTransType.WithoutTransaction:
+                Customers = GetAllCustomer(poProcessRecordCount);
+                lnCount = 1;
+                foreach (CustomerDbDTO item in Customers)
+                {
+                    try
                     {
-                        //RemoveAllRecord(poTranScopDemoParameterDTO.RecordCount);
-                        //AddAllRecord(poTranScopDemoParameterDTO.RecordCount);
+                        using (TransactionScope TransScope = new TransactionScope(TransactionScopeOption.Required))
+                        {
+                            RemoveEachCustomer(item);
+                            AddLogEachCustomer(item);
+                            AddEachCopyCustomer(item);
 
-                        break;
+                            if ((lnCount % 3) == 0)
+                            {
+                                loException.Add("001", $"Error at {lnCount} data");
+                                goto EndDetail;
+                            }
+
+                            TransScope.Complete();
+                        }
                     }
-
-                case eTransType.AllTransaction:
+                    catch (Exception ex)
                     {
-                        try
-                        {
-                            using (TransactionScope TransScope = new TransactionScope(TransactionScopeOption.Suppress))
-                            {
-                                //RemoveAllRecord(poTranScopDemoParameterDTO.RecordCount);
-                                //AddAllRecord(poTranScopDemoParameterDTO.RecordCount);
-
-                                TransScope.Complete();
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-
-                            throw ex;
-                        }
-
-                        break;
+                        loException.Add(ex);
                     }
-                case eTransType.PerRecordTransacton:
-                    {
-                        for (int lnCount = 1; lnCount <= poTranScopDemoParameterDTO.RecordCount; lnCount++)
-                        {
+                EndDetail:
 
-                            try
-                            {
-                                using (TransactionScope TransScope = new TransactionScope(TransactionScopeOption.RequiresNew))
-                                {
-                                    RemoveRecord(lnCount);
-                                    AddRecord(lnCount);
+                    lnCount++;
+                }
 
-                                    TransScope.Complete();
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                loException.Add(ex);
-                            }
-                        }
 
-                        break;
-                    }
+
+                loRtn.IsSuccess = true;
             }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
 
+            return loRtn;
         }
 
         private List<CustomerDbDTO> GetAllCustomer(int pnCount)
@@ -271,6 +258,166 @@ namespace TranScopeBack
         EndBlock:
             loException.ThrowExceptionIfErrors();
         }
+
+        private void RemoveAllCustomer(List<CustomerDbDTO> poCustomers)
+        {
+            R_Exception loException = new R_Exception();
+            try
+            {
+                foreach (CustomerDbDTO item in poCustomers)
+                {
+                    RemoveEachCustomer(item);
+                    AddLogEachCustomer(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+
+        }
+        private void RemoveEachCustomer(CustomerDbDTO poCustomer)
+        {
+            R_Exception loException = new R_Exception();
+            R_Db loDb = null;
+            DbConnection loConn = null;
+            DbCommand loCommand;
+            string lcCmd;
+            DbParameter loDbParameter;
+
+            try
+            {
+                loDb = new R_Db();
+                loCommand = loDb.GetCommand();
+                loConn = loDb.GetConnection();
+                loDb.R_AddCommandParameter(loCommand, "StrPar1", DbType.String, 50, "");
+                loDbParameter = loCommand.Parameters[0];
+
+                lcCmd = "delete TestCustomer where CustomerID=@StrPar1";
+                loCommand.CommandText = lcCmd;
+                loDbParameter.Value = poCustomer.CustomerId;
+                loDb.SqlExecNonQuery(loConn, loCommand, false);
+
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+            finally
+            {
+                if (loConn != null)
+                {
+                    if (loConn.State != ConnectionState.Closed)
+                    {
+                        loConn.Close();
+                    }
+                    loConn.Dispose();
+                }
+            }
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+        }
+        private void AddLogEachCustomer(CustomerDbDTO poCustomer)
+        {
+            R_Exception loException = new R_Exception();
+            R_Db loDb = null;
+            DbConnection loConn = null;
+            DbCommand loCommand;
+            string lcCmd;
+            DbParameter loDbParameter;
+            try
+            {
+                using (TransactionScope TransScope = new TransactionScope(TransactionScopeOption.Suppress))
+                {
+                    loDb = new R_Db();
+                    loCommand = loDb.GetCommand();
+                    loConn = loDb.GetConnection();
+                    loDb.R_AddCommandParameter(loCommand, "StrPar1", DbType.String, 50, "");
+                    loDbParameter = loCommand.Parameters[0];
+
+                    lcCmd = "insert into TestCustomerLog(Log) Values(@StrPar1)";
+                    loCommand.CommandText = lcCmd;
+                    loDbParameter.Value = $"Remove Customer {poCustomer.CustomerId}";
+                    loDb.SqlExecNonQuery(loConn, loCommand, false);
+                }
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+            finally
+            {
+                if (loConn != null)
+                {
+                    if (loConn.State != ConnectionState.Closed)
+                    {
+                        loConn.Close();
+                    }
+                    loConn.Dispose();
+                }
+            }
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+        }
+        private void AddEachCopyCustomer(CustomerDbDTO poCustomer)
+        {
+            R_Exception loException = new R_Exception();
+            R_Db loDb = null;
+            DbConnection loConn = null;
+            DbCommand loCommand;
+            string lcCmd;
+            DbParameter loDbParCustomerID;
+            DbParameter loDbParCustomerName;
+            DbParameter loDbParContactName;
+
+            try
+            {
+                loDb = new R_Db();
+                loCommand = loDb.GetCommand();
+                loConn = loDb.GetConnection();
+                loDb.R_AddCommandParameter(loCommand, "CustomerID", DbType.String, 50, "");
+                loDb.R_AddCommandParameter(loCommand, "CustomerName", DbType.String, 50, "");
+                loDb.R_AddCommandParameter(loCommand, "ContactName", DbType.String, 50, "");
+
+                loDbParCustomerID = loCommand.Parameters["CustomerID"];
+                loDbParCustomerName = loCommand.Parameters["CustomerName"];
+                loDbParContactName = loCommand.Parameters["ContactName"];
+
+                lcCmd = "insert into TestCopyCustomer(CustomerID, CustomerName, ContactName) Values(@CustomerID, @CustomerName, @ContactName)";
+                loCommand.CommandText = lcCmd;
+                loDbParCustomerID.Value = poCustomer.CustomerId;
+                loDbParCustomerName.Value = poCustomer.CustomerName;
+                loDbParContactName.Value = poCustomer.ContactName;
+                loDb.SqlExecNonQuery(loConn, loCommand, false);
+
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+            finally
+            {
+                if (loConn != null)
+                {
+                    if (loConn.State != ConnectionState.Closed)
+                    {
+                        loConn.Close();
+                    }
+                    loConn.Dispose();
+                }
+
+
+            }
+        EndBlock:
+            loException.ThrowExceptionIfErrors();
+
+
+        }
+
+
         private void RemoveRecord(int pnCount)
         {
             R_Exception loException = new R_Exception();
@@ -304,6 +451,67 @@ namespace TranScopeBack
 
         EndBlock:
             loException.ThrowExceptionIfErrors();
+        }
+        public void TranScopeDemo(TranScopDemoParameterDTO poTranScopDemoParameterDTO)
+        {
+            R_Exception loException = new R_Exception();
+            R_Db loDb = new R_Db();
+
+            switch (poTranScopDemoParameterDTO.TransType)
+            {
+                case eTransType.WithoutTransaction:
+                    {
+                        //RemoveAllRecord(poTranScopDemoParameterDTO.RecordCount);
+                        //AddAllRecord(poTranScopDemoParameterDTO.RecordCount);
+
+                        break;
+                    }
+
+                case eTransType.AllTransaction:
+                    {
+                        try
+                        {
+                            using (TransactionScope TransScope = new TransactionScope(TransactionScopeOption.Suppress))
+                            {
+                                //RemoveAllRecord(poTranScopDemoParameterDTO.RecordCount);
+                                //AddAllRecord(poTranScopDemoParameterDTO.RecordCount);
+
+                                TransScope.Complete();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                            throw ex;
+                        }
+
+                        break;
+                    }
+                case eTransType.PerRecordTransacton:
+                    {
+                        for (int lnCount = 1; lnCount <= poTranScopDemoParameterDTO.RecordCount; lnCount++)
+                        {
+
+                            try
+                            {
+                                using (TransactionScope TransScope = new TransactionScope(TransactionScopeOption.RequiresNew))
+                                {
+                                    RemoveRecord(lnCount);
+                                    AddRecord(lnCount);
+
+                                    TransScope.Complete();
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                loException.Add(ex);
+                            }
+                        }
+
+                        break;
+                    }
+            }
+
         }
     }
 }

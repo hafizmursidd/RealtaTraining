@@ -60,7 +60,23 @@ namespace TranScopeService
         [HttpPost]
         public TranScopeDemoResultDTO ProcessPerRecordTransaction(int poProcessRecord)
         {
-            throw new NotImplementedException();
+            R_Exception loException = new R_Exception();
+            TranScopeDemoResultDTO loRtn = null;
+            TranScopeCls loCls = null;
+            try
+            {
+                loRtn = new TranScopeDemoResultDTO();
+
+                loCls = new TranScopeCls();
+                loRtn.data = loCls.ProcessEachTransactionDB(poProcessRecord);
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+            loException.ThrowExceptionIfErrors();
+
+            return loRtn;
         }
 
         //[HttpPost]

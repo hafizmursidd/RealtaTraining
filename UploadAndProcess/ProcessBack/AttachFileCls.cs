@@ -59,9 +59,4 @@ namespace ProcessBack
 
         }
     }
-
-    public class ProcessFileCls
-    {
-
-    }
 }

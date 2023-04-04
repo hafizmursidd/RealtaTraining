@@ -22,7 +22,8 @@ internal class Program
         R_HTTPClient.R_CreateInstanceWithName("DEFAULT", loHttpClient);
         loClient = R_HTTPClient.R_GetInstanceWithName("DEFAULT");
 
-        Task.Run(() => ServiceAtttachFile());
+        //Task.Run(() => ServiceAtttachFile());
+        Task.Run(() => ServiceProcess());
         Console.ReadKey();
     }
 
@@ -65,6 +66,51 @@ internal class Program
             //proses kelas
             loCls = new R_ProcessAndUploadClient(poProcessProgressStatus: loProgress, plSendWithContext:false,plSendWithToken : false);
             await loCls.R_AttachFile<object>(loUploadPar);
+        }
+        catch (Exception ex)
+        {
+            loException.add(ex);
+        }
+    EndBlock:
+        loException.ThrowExceptionIfErrors();
+    }
+
+    static async Task ServiceProcess()
+    {
+        R_APIException loException = new R_APIException();
+        List<R_KeyValue> loUserParameters;
+        R_BatchParameter loBatchPar;
+        R_ProcessAndUploadClient loCls;
+        R_IProcessProgressStatus loProgress;
+        string lcGuid;
+
+        try
+        {
+            //prepare for user par
+            loUserParameters = new List<R_KeyValue>();
+            loUserParameters.Add(new R_KeyValue() { Key = ProcessConstant.LOOP, Value = 10 });
+            loUserParameters.Add(new R_KeyValue() { Key = ProcessConstant.IS_ERROR, Value = false });
+            loUserParameters.Add(new R_KeyValue() { Key = ProcessConstant.IS_ERROR_STATEMENT, Value = false });
+
+
+            //mempersiapkan upload file
+            loBatchPar = new R_BatchParameter();
+            loBatchPar.UserParameters = loUserParameters;
+
+            loBatchPar.USER_ID = "User001";
+            loBatchPar.COMPANY_ID = "CO001";
+            loBatchPar.ClassName = "ProcessBack.BatchProcessCls";
+
+            //proses status
+            loProgress = new ProcessStatus();
+            //((ProcessStatus)loProgress).CompanyId
+
+            //proses kelas
+            loCls = new R_ProcessAndUploadClient(poProcessProgressStatus: loProgress, plSendWithContext: false, plSendWithToken: false);
+            lcGuid = await loCls.R_BatchProcess<object>(loBatchPar,10);
+
+            Console.WriteLine($"Process with return GUID {lcGuid}");
+           // GEt
         }
         catch (Exception ex)
         {

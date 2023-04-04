@@ -14,7 +14,7 @@ namespace ProcessConsole
     public class ProcessStatus : R_IProcessProgressStatus
     {
         public string CompanyId { get; set; }
-        public string Userid { get; set; }
+        public string UserId { get; set; }
 
         public Task ProcessComplete(string pcKeyGuid, eProcessResultMode poProcessResultMode)
         {
@@ -54,7 +54,7 @@ namespace ProcessConsole
             try
             {
                 loCls = new R_ProcessAndUploadClient(plSendWithContext: false, plSendWithToken: false);
-                loErrorReturn =await loCls.R_GetErrorProcess(new R_UploadAndProcessKey() { COMPANY_ID = this.CompanyId, USER_ID = this.Userid, KEY_GUID = pcKeyGuid });
+                loErrorReturn =await loCls.R_GetErrorProcess(new R_UploadAndProcessKey() { COMPANY_ID = this.CompanyId, USER_ID = this.UserId, KEY_GUID = pcKeyGuid });
                 foreach (var item in loErrorReturn)
                 {
                     Console.WriteLine($"Error Seq: {item.SeqNo}, Error Msg: {item.ErrorMessage} !!!");

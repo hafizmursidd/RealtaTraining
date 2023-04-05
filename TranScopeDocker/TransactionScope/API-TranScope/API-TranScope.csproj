@@ -18,52 +18,52 @@
 
 <ItemGroup>
       <Reference Include="R_APIBackEnd">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_APIBackEnd.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_APIBackEnd.dll</HintPath>
       </Reference>
       <Reference Include="R_APICommon">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_APICommon.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_APICommon.dll</HintPath>
       </Reference>
       <Reference Include="R_APICommonDTO">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_APICommonDTO.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_APICommonDTO.dll</HintPath>
       </Reference>
       <Reference Include="R_APIStartUp">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_APIStartUp.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_APIStartUp.dll</HintPath>
       </Reference>
       <Reference Include="R_AuthenticationBack">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_AuthenticationBack.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_AuthenticationBack.dll</HintPath>
       </Reference>
       <Reference Include="R_AuthenticationEnumAndInterface">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_AuthenticationEnumAndInterface.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_AuthenticationEnumAndInterface.dll</HintPath>
       </Reference>
       <Reference Include="R_CommonFrontBackAPI">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_CommonFrontBackAPI.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_CommonFrontBackAPI.dll</HintPath>
       </Reference>
       <Reference Include="R_ContextAPIMiddleware">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_ContextAPIMiddleware.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_ContextAPIMiddleware.dll</HintPath>
       </Reference>
       <Reference Include="R_ContextBackEnd">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_ContextBackEnd.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_ContextBackEnd.dll</HintPath>
       </Reference>
       <Reference Include="R_ContextEnumAndInterface">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_ContextEnumAndInterface.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_ContextEnumAndInterface.dll</HintPath>
       </Reference>
       <Reference Include="R_ControllerPlugins">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_ControllerPlugins.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_ControllerPlugins.dll</HintPath>
       </Reference>
       <Reference Include="R_ExceptionAPIMiddleware">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_ExceptionAPIMiddleware.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_ExceptionAPIMiddleware.dll</HintPath>
       </Reference>
       <Reference Include="R_HelperController">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_HelperController.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_HelperController.dll</HintPath>
       </Reference>
       <Reference Include="R_LogHeaderMiddleware">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_LogHeaderMiddleware.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_LogHeaderMiddleware.dll</HintPath>
       </Reference>
       <Reference Include="R_PluginsCommon">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_PluginsCommon.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_PluginsCommon.dll</HintPath>
       </Reference>
       <Reference Include="R_Security">
-        <HintPath>..\..\TranScopeDocker\RuntimeLibrary\Back\R_Security.dll</HintPath>
+        <HintPath>..\RuntimeLibrary\Back\R_Security.dll</HintPath>
       </Reference>
       <Reference Include="TranScopeService">
         <HintPath>..\dll\TranScopeService.dll</HintPath>

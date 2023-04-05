@@ -85,7 +85,7 @@ namespace TranScopeBack
                             AddLogEachCustomer(item);
                             AddEachCopyCustomer(item);
 
-                            if ((lnCount % 3) == 0)
+                            if ((lnCount % 9) == 0)
                             {
                                 loException.Add("001", $"Error at {lnCount} data");
                                 goto EndDetail;

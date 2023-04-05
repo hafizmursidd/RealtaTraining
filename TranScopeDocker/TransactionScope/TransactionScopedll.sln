@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API-TranScope", "API-TranScope\API-TranScope.csproj", "{22DD7B4E-8416-43AF-8D89-3D921E038063}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22DD7B4E-8416-43AF-8D89-3D921E038063}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22DD7B4E-8416-43AF-8D89-3D921E038063}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22DD7B4E-8416-43AF-8D89-3D921E038063}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22DD7B4E-8416-43AF-8D89-3D921E038063}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {98991BEC-5468-4F9D-B91C-BA3E186B3326}
+	EndGlobalSection
+EndGlobal

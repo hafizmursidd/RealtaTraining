@@ -15,7 +15,7 @@ namespace GSM00200Service
 
         //type with (...non) digunakan untuk streaming dengan field yang lebih sedikit
         [HttpPost]
-        public IAsyncEnumerable<GSM00200DTOnon> GetTableHDList() 
+        public IAsyncEnumerable<GSM00200DTOnon> GetTableHDList()
         {
             R_Exception loException = new R_Exception();
             IAsyncEnumerable<GSM00200DTOnon> loRtn = null;
@@ -40,7 +40,35 @@ namespace GSM00200Service
 
             return loRtn;
         }
-        
+
+        /// <summary>
+        //
+        /// </summary>
+        [HttpPost]
+        public async Task<GSM00200DTOnon> GetTableList()
+        {
+            R_Exception loException = new R_Exception();
+            List<GSM00200DTOnon> loRtn = null;
+            GSM00200Cls loCls;
+            string loCompId;
+
+            try
+            {
+                loCompId = R_Utility.R_GetStreamingContext<string>(GSM00200Constant.CCOMPANY_ID);
+                loCls = new GSM00200Cls();
+
+                loRtn = loCls.GetTableHDList(loCompId);
+            }
+            catch (Exception ex)
+            {
+                loException.Add(ex);
+            }
+
+            loException.ThrowExceptionIfErrors();x`
+
+            return loRtn;
+        }
+
         [HttpPost]
         public R_ServiceGetRecordResultDTO<GSM00200DTO> R_ServiceGetRecord(R_ServiceGetRecordParameterDTO<GSM00200DTO> poParameter)
         {
@@ -63,7 +91,7 @@ namespace GSM00200Service
 
             return loRtn;
         }
-        
+
         [HttpPost]
         public R_ServiceSaveResultDTO<GSM00200DTO> R_ServiceSave(R_ServiceSaveParameterDTO<GSM00200DTO> poParameter)
         {
@@ -119,5 +147,7 @@ namespace GSM00200Service
                 yield return item;
             }
         }
+
+
     }
 }
